@@ -1,11 +1,13 @@
 pipeline {
     agent any
+    environment {
+        FILE_NAME = "text-${BUILD_ID}.txt"
+    }
     stages {
         stage('clone') {
             steps {
                 sh 'echo "Cloning repository..."'
-                // Add git clone command if needed
-                // git url: 'https://github.com/utrains/nodeLogin.git', branch: 'main'
+                //git url: 'https://github.com/utrains/nodeLogin.git', branch: 'main'
             }
         }
         stage('test') {
@@ -15,8 +17,16 @@ pipeline {
         }
         stage('createfile') {
             steps {
-                sh 'touch text-${BUILD_ID}.txt'
+                sh "touch ${FILE_NAME}"
             }
+        }
+    }
+    post {
+        success {
+            echo 'Pipeline succeeded!'
+        }
+        failure {
+            echo 'Pipeline failed!'
         }
     }
 }
